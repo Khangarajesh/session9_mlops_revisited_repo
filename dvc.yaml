@@ -13,3 +13,19 @@ stages:
     - src/data/data_preprocessing.py
     outs:
     - data/processed
+
+
+  feature_engineering:
+    cmd: python src/features/feature_engineering.py
+    deps:
+    - data/processed
+    - src/features/feature_engineering.py
+    outs:
+    - data/feature_eng
+  model_training:
+    cmd: python src/models/train_model.py
+    deps:
+    - data/feature_eng
+    - src/models/train_model.py
+    outs:
+    - models/

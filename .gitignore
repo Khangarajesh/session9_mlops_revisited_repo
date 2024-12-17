@@ -79,6 +79,7 @@ target/
 /data/
 /mlops_venv/
 /mlops_revisited_env/
+/models/
 # Mac OS-specific storage files
 .DS_Store
 
@@ -88,3 +89,4 @@ target/
 
 # Mypy cache
 .mypy_cache/
+/models
