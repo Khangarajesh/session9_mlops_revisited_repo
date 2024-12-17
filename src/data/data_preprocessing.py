@@ -1,4 +1,7 @@
 import re 
+import os
+os.add_dll_directory(r"C:\Users\Rajesh Assignment\MLOPS\session9_mlops_revisited_repo\mlops_revisited_env\lib\site-packages\sklearn\.libs")
+import sklearn
 import nltk
 import string 
 from nltk.corpus import stopwords

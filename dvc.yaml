@@ -1,10 +1,10 @@
 stages:
   data_ingestion:
-    cmd: python src/data_inestion.py
+    cmd: python src/data/data_ingestion.py
     deps:
-    - src/data/data_inestion.py
+    - src/data/data_ingestion.py
     params:
-    - params.yaml
+    - data_ingestion.test_size
     outs:
     - data/raw
   data_preprocessing:
