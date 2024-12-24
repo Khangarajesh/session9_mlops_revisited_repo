@@ -5,6 +5,17 @@ import numpy as np
 import xgboost as xgb
 from sklearn.metrics import accuracy_score, classification_report
 #path 
+import logging
+logger = logging.getLogger("model_evaluation")
+logger.setLevel("DEBUG")
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel("DEBUG")
+
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
+
 def target_path(path: str) -> str:
     '''This function returns the file path'''
     current_dir = pathlib.Path(__file__)
@@ -19,7 +30,7 @@ def load_data(path_inp: str) -> tuple:
     
     file_dir = target_path(path_inp)
     df = pd.read_csv(file_dir)
-    print("df crwated")
+    logger.debug("df crwated")
     x = df.iloc[:,0:-1].values
     y = df.iloc[:,-1].values
     return x, y 
@@ -36,15 +47,15 @@ def main():
     x_train,y_train = load_data('/data/feature_eng/train_bow.csv')
     x_test,y_test = load_data('/data/feature_eng/test_bow.csv')
     model = model_load()
-    print(x_test)
+    logger.debug("model loaded from pickle file")
     try:
       #y_pred = model.predict(x_test)
       y_pred = y_test
-      print("prediction doone")
+      logger.debug("prediction doone")
       accuracy = accuracy_score(y_test, y_pred)
-      print(accuracy)
+      logger.debug(accuracy)
     except Exception as e:
-      print(e.with_traceback)
+      logger.error(e.with_traceback)
     
     #classification_rep = classification_report(y_test, y_pred
 

@@ -7,9 +7,18 @@ from nltk.stem import SnowballStemmer, WordNetLemmatizer
 import pathlib
 import pandas as pd 
 import numpy as np
+import logging 
 
 nltk.download('wordnet')
 nltk.download('stopwords')
+
+logger = logging.getLogger("data_preprocessing")
+logger.setLevel('DEBUG')
+
+consol_handler = logging.StreamHandler()
+consol_handler.setLevel('DEBUG')
+
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 def target_path(path: str) -> str:
     '''This function returns the file path'''
@@ -62,27 +71,33 @@ def remove_small_sentences(df: pd.DataFrame) -> None:
 def normalize_text(df: pd.DataFrame) -> pd.DataFrame:
     try: 
       df.content=df.content.apply(lambda content : lower_case(content))
+      logger.debug("letter made lower case")
       df.content=df.content.apply(lambda content : remove_stop_words(content))
+      logger.debug("stop words removed")
       df.content=df.content.apply(lambda content : removing_numbers(content))
+      logger.debug("numbers removed")
       df.content=df.content.apply(lambda content : removing_punctuations(content))
+      logger.debug("removed punctuation")
       df.content=df.content.apply(lambda content : removing_urls(content))
+      logger.debug("remove urls")
       df.content=df.content.apply(lambda content : lemmatization(content))
+      logger.debug("applied lemetization")
     except Exception as e:
-      print(f"Error: {e}")
+      logger.error(f"Error: {e}")
     else:
       return df
 
 def save_data(train_data_p: pd.DataFrame, test_data_p: pd.DataFrame) -> None:
     
-    train_path = target_path('/data/processed/') + 'train_processed.csv'
-    test_path = target_path('/data/processed/') + 'test_processed.csv'
+    train_path = target_path('/data/processed/') + 'train_processed2.csv'
+    test_path = target_path('/data/processed/') + 'test_processed2.csv'
     try:
       train_data_p.to_csv(train_path)
       test_data_p.to_csv(test_path)
     except FileNotFoundError as e:
-      print(f"Error: File not present at path {e}")
+      logger.error(f"Error: File not present at path {e}")
     except Exception as e:
-      print(f"Error: {e}")
+      logger.error(f"Error: {e}")
 
 def main():
     try: 
@@ -90,17 +105,19 @@ def main():
       train_df = pd.read_csv(input_path+"train.csv")
       test_df = pd.read_csv(input_path+"test.csv")   
     except FileNotFoundError as e:
-      print(f"Error: File not present at path {e}")
+      logger.error(f"Error: File not present at path {e}")
     except Exception as e:
-      print(f"Error: some unknown issue {e}")
+      logger.error(f"Error: some unknown issue {e}")
       
     try:   
       train_process_df = normalize_text(train_df)
       test_process_df = normalize_text(test_df)
+      logger.info("normalization done")
     except Exception as e:
-      print(f"Error: While returning normalize_text function output {e}")
+      logger.error(f"Error: While returning normalize_text function output {e}")
     else:
       save_data(train_process_df, test_process_df)
+      logger.info("files saved in data/processed/")
     
 if __name__ == '__main__':
 

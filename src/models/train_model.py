@@ -9,6 +9,18 @@ from sklearn.feature_extraction.text import CountVectorizer
 import xgboost as xgb
 from sklearn.ensemble import GradientBoostingClassifier
 import pickle as pkl
+import logging 
+
+logger = logging.getLogger("train_model")
+logger.setLevel("DEBUG")
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel("DEBUG")
+
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+console_handler.setFormatter(formatter)
+
+logger.addHandler(console_handler)
 
 def target_path(path: str) -> str:
     '''This function returns the file path'''
@@ -28,9 +40,9 @@ def model_training(df: pd.DataFrame) -> xgb.sklearn.XGBClassifier:
       xgb_model = xgb.XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
       xgb_model.fit(X_train_bow, y_train)
     except ValueError as e:
-      print(f"Error: {e}")
+      logger.eeror(f"Error: {e}")
     except Exception as e:
-      print(f"Error: {e}")
+      logger.error(f"Error: {e}")
     return xgb_model
 
 def save_model(model: xgb.sklearn.XGBClassifier) -> None:
@@ -38,26 +50,29 @@ def save_model(model: xgb.sklearn.XGBClassifier) -> None:
       model_path = target_path("/models/")
       pkl.dump(model,open(model_path+'model.pkl','wb'))
     except FileNotFoundError as e:
-      print(f"Error: {e}")
+      logger.error(f"Error: {e}")
     except PermissionError as e:
-      print(f"Error: {e}")
+      logger.error(f"Error: {e}")
     except Exception as e:
-      print(f"Error: {e}")
+      logger.error(f"Error: {e}")
     
 def main():
     try:
       file_path = target_path('/data/feature_eng/')
       train_df = pd.read_csv(file_path+"train_bow.csv")
+      logger.info("file loading done")
     except FileNotFoundError as e:
-      print(f"Error: file not found {e}")
+      logger.error(f"Error: file not found {e}")
     except Exception as e:
-      print(f"Error: Some unknown issue {e}")
+      logger.error(f"Error: Some unknown issue {e}")
     
     try: 
       model = model_training(train_df)
+      logger.info("model training done")
       save_model(model)
+      logger.info("model pickle file created")
     except Exception as e:
-      print(f"Error: Isuue occured while training model {e}")
+      logger.error(f"Error: Isuue occured while training model {e}")
     
 if __name__ == "__main__":
     main()
