@@ -44,8 +44,8 @@ def model_load() -> xgb.sklearn.XGBClassifier:
 
 #model matricks 
 def main():
-    x_train,y_train = load_data('/data/feature_eng/train_bow.csv')
-    x_test,y_test = load_data('/data/feature_eng/test_bow.csv')
+    x_train,y_train = load_data('/data/feature_eng/train_bow1.csv')
+    x_test,y_test = load_data('/data/feature_eng/test_bow1.csv')
     model = model_load()
     logger.debug("model loaded from pickle file")
     try:

@@ -32,11 +32,11 @@ def load_params(params_path: str) -> int:
     try: 
       test_size = yaml.safe_load(open(params_path, 'r'))['data_ingestion']['test_size']
     except yaml.YAMLError as e:
-      print(f"yaml error {e}") 
+      logger.error(f"yaml error {e}") 
     except FileNotFoundError as e:
-      print(f"file not found {e}") 
+      logger.error(f"file not found {e}") 
     except Exception as e:
-      print(f"unknown error {e}")
+      logger.error(f"unknown error {e}")
     else:
       return test_size
 
@@ -44,9 +44,9 @@ def read_data(url: str) -> pd.DataFrame:
     try:
       df = pd.read_csv(url)
     except FileNotFoundError as e:
-      print(f"file not found {e}") 
+      logger.error(f"file not found {e}") 
     except Exception as e:
-      print(f"unknown error {e}") 
+      logger.error(f"unknown error {e}") 
     else:   
       return df
 
@@ -56,24 +56,24 @@ def process_data(df: pd.DataFrame) -> pd.DataFrame:
       final_df = df[df['sentiment'].isin(['happiness','sadness'])]
       final_df['sentiment'].replace({'happiness':1, 'sadness':0},inplace=True)
     except KeyError as e:
-      print(f"column not found in dataframe {e}")
+      logger.error(f"column not found in dataframe {e}")
     except Exception as e:
-      print(f"Unknown error found {e}")
+      logger.error(f"Unknown error found {e}")
     else:    
       return final_df
 
 def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame) -> None:
     try: 
-      train_path = target_path('/data/raw/') + 'train.csv'
-      test_path = target_path('/data/raw/') + 'test.csv'
+      train_path = target_path('/data/raw/') + 'train1.csv'
+      test_path = target_path('/data/raw/') + 'test1.csv'
       train_data.to_csv(train_path)
       test_data.to_csv(test_path)
     except FileNotFoundError as e:
-      print(f"File not found at path {e}")
+      logger.error(f"File not found at path {e}")
     except FileExistsError as e:
-      print(f"File not found {e}")
+      logger.error(f"File not found {e}")
     except Exception as e:
-      print(f"some unknown error occured")
+      logger.error(f"some unknown error occured")
 
 
 def main():

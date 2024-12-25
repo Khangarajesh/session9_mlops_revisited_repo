@@ -89,8 +89,8 @@ def normalize_text(df: pd.DataFrame) -> pd.DataFrame:
 
 def save_data(train_data_p: pd.DataFrame, test_data_p: pd.DataFrame) -> None:
     
-    train_path = target_path('/data/processed/') + 'train_processed2.csv'
-    test_path = target_path('/data/processed/') + 'test_processed2.csv'
+    train_path = target_path('/data/processed/') + 'train_processed1.csv'
+    test_path = target_path('/data/processed/') + 'test_processed1.csv'
     try:
       train_data_p.to_csv(train_path)
       test_data_p.to_csv(test_path)
@@ -102,8 +102,8 @@ def save_data(train_data_p: pd.DataFrame, test_data_p: pd.DataFrame) -> None:
 def main():
     try: 
       input_path =  target_path("/data/raw/")
-      train_df = pd.read_csv(input_path+"train.csv")
-      test_df = pd.read_csv(input_path+"test.csv")   
+      train_df = pd.read_csv(input_path+"train1.csv")
+      test_df = pd.read_csv(input_path+"test1.csv")   
     except FileNotFoundError as e:
       logger.error(f"Error: File not present at path {e}")
     except Exception as e:

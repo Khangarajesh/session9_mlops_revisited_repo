@@ -59,7 +59,7 @@ def save_model(model: xgb.sklearn.XGBClassifier) -> None:
 def main():
     try:
       file_path = target_path('/data/feature_eng/')
-      train_df = pd.read_csv(file_path+"train_bow.csv")
+      train_df = pd.read_csv(file_path+"train_bow1.csv")
       logger.info("file loading done")
     except FileNotFoundError as e:
       logger.error(f"Error: file not found {e}")
