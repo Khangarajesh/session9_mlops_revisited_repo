@@ -1,0 +1,4 @@
+[core]
+    remote = dvcstores3
+['remote "dvcstores3"']
+    url = s3://campusxmlopsdvcbucket

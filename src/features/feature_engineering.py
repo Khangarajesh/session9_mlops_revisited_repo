@@ -42,7 +42,7 @@ def app_vectorizer(df: pd.DataFrame) -> pd.DataFrame:
     
     try: 
     # Apply Bag of Words (CountVectorizer)
-      vectorizer = CountVectorizer()    
+      vectorizer = CountVectorizer(max_features= 10)    
       # Fit the vectorizer on the training data and transform it
       X_bow = vectorizer.fit_transform(X_train)
     except ValueError as e:

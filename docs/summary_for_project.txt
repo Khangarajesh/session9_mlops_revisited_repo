@@ -1,0 +1,22 @@
+1)notebook converted to modular code using cookiecutter template 
+2)versio controll applied for code 
+3)code quality improved by applying functions, type hinting and logging 
+4)dvc use for creating yaml file (dvc stage add -n stage_name -d dependency -p parametrs -o output)
+5)dvc used for data versioning 
+while creating cookiecutter template we used git init then dvc init . We make sure here that the folders tracked by dvc is ignored by git by pu
+putting it in .gitignore file.
+now whenever you do dvc repro whatever present in output part of everystage in dvc.yaml will be automaticall tracked by dvc u do not need to 
+explicitly do dvc add something.... It is intalligient enought to understand what needs to be tracked.
+6)The only thing yoou will ned to do is add remote location for dvc. It can be local or AWS s3 location.
+7)for s3:
+pip install aws cli
+pip install dvc[s3]
+aws configuration (add secret key and aws key here)
+dvc add remote -d name https://s3_bucket_name
+now you can do dvc push 
+
+
+now whenever you want to go back to the previous version of data then first 
+git checkout 
+dvc fetch 
+dvc checkout 
