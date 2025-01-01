@@ -50,7 +50,7 @@ def app_vectorizer(df: pd.DataFrame) -> pd.DataFrame:
     except Exception as e:
       logger.error(f"Error: Unknown issue {e}")
     try: 
-      final_df = pd.DataFrame(X_bow.toarray())
+      final_df = pd.DataFrame(X_bow.toarray(), columns= ['col0', 'col1', 'col2', 'col3', 'col4', 'col5', 'col6','col7', 'col8', 'col9'])
       final_df['label'] = y_train
     except Exception as e:
       logger.error(f"Error: Unable to create a final dataframe {e}")
