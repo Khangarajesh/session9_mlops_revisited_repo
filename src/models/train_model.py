@@ -10,6 +10,10 @@ import xgboost as xgb
 from sklearn.ensemble import GradientBoostingClassifier
 import pickle as pkl
 import logging 
+import mlflow
+
+
+
 
 #hii yarr
 logger = logging.getLogger("train_model")
@@ -38,8 +42,11 @@ def model_training(df: pd.DataFrame) -> xgb.sklearn.XGBClassifier:
       X_train_bow = df.iloc[:,0:-1]
       y_train = df.iloc[:,-1]
       # Define and train the XGBoost model
-      xgb_model = xgb.XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+      eval_metric = 'mlogloss'
+      xgb_model = xgb.XGBClassifier(use_label_encoder=False, eval_metric=eval_metric)
       xgb_model.fit(X_train_bow, y_train)
+
+      #mlflow.log_params(eval_metric)
     except ValueError as e:
       logger.eeror(f"Error: {e}")
     except Exception as e:
@@ -68,10 +75,17 @@ def main():
       logger.error(f"Error: Some unknown issue {e}")
     
     try: 
-      model = model_training(train_df)
-      logger.info("model training done")
-      save_model(model)
-      logger.info("model pickle file created")
+      mlflow.set_tracking_uri("https://127.0.0.1:5000")
+      #experiment name set
+      mlflow.set_experiment("sentiment analysis")
+      #start tracking  
+      with mlflow.start_run(run_name = 'first run'):
+        model = model_training(train_df)
+        mlflow.skleran.log_model(model)
+        mlflow.log_artifact(__file__)
+        logger.info("model training done")
+        save_model(model)
+        logger.info("model pickle file created")
     except Exception as e:
       logger.error(f"Error: Isuue occured while training model {e}")
     
