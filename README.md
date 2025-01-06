@@ -186,3 +186,8 @@ c)Note that before excecuting the last command mentioned above i.e ( mlflow serv
 you will hav to go the 
 ec2 machine => security => security group => edit inbound rules =>add rule =>custom tcp, port: 5000, 0.0.0/0 (this indicates any computer can acess this server. However you can restrict it)
 d)now add the mlflow.set_tracking_uri("http://ec2-13-51-172-108.eu-north-1.compute.amazonaws.com:5000/")
+e)data tracking using mlflow n
+       train_df_log = pd.read_csv(target_path("/data/feature_eng/") + "train_bow1.csv")
+        test_df_log = pd.read_csv(target_path("/data/feature_eng/") + "test_bow1.csv")
+        train_df_log = mlflow.data.from_pandas(train_df_log)
+        test_df_log = mlflow.data.from_pandas(test_df_log)
