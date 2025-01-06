@@ -11,6 +11,8 @@ from sklearn.ensemble import GradientBoostingClassifier
 import pickle as pkl
 import logging 
 import mlflow
+import mlflow.sklearn
+import mlflow.xgboost
 
 
 
@@ -75,13 +77,14 @@ def main():
       logger.error(f"Error: Some unknown issue {e}")
     
     try: 
-      mlflow.set_tracking_uri("https://127.0.0.1:5000")
+      #mlflow.set_tracking_uri("https://127.0.0.1:5000")
+      mlflow.set_tracking_uri("http://ec2-13-51-172-108.eu-north-1.compute.amazonaws.com:5000/")
       #experiment name set
       mlflow.set_experiment("sentiment analysis")
       #start tracking  
-      with mlflow.start_run(run_name = 'first run'):
+      with mlflow.start_run():
         model = model_training(train_df)
-        mlflow.skleran.log_model(model)
+        mlflow.xgboost.log_model(model,"model")
         mlflow.log_artifact(__file__)
         logger.info("model training done")
         save_model(model)
