@@ -191,3 +191,34 @@ e)data tracking using mlflow n
         test_df_log = pd.read_csv(target_path("/data/feature_eng/") + "test_bow1.csv")
         train_df_log = mlflow.data.from_pandas(train_df_log)
         test_df_log = mlflow.data.from_pandas(test_df_log)
+
+
+
+# Create an instance of a PandasDataset
+dataset = mlflow.data.from_pandas(
+    raw_data, source=dataset_source_url, name="wine quality - white", targets="quality"
+)
+
+# Log the Dataset to an MLflow run by using the `log_input` API
+with mlflow.start_run() as run:
+    mlflow.log_input(dataset, context="training")
+
+#-------------------------------------------------------
+
+# Retrieve the run information
+logged_run = mlflow.get_run(run.info.run_id)
+
+# Retrieve the Dataset object
+logged_dataset = logged_run.inputs.dataset_inputs[0].dataset
+
+When we want to load the dataset back from the location that it’s stored (calling load will download the data locally), we access the Dataset’s source via the following API:
+
+# Loading the dataset's source
+dataset_source = mlflow.data.get_source(logged_dataset)
+
+local_dataset = dataset_source.load()
+
+print(f"The local file where the data has been downloaded to: {local_dataset}")
+
+# Load the data again
+loaded_data = pd.read_csv(local_dataset, delimiter=";")

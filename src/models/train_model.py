@@ -88,8 +88,10 @@ def main():
         test_df_log = pd.read_csv(target_path("/data/feature_eng/") + "test_bow1.csv")
         train_df_log = mlflow.data.from_pandas(train_df_log)
         test_df_log = mlflow.data.from_pandas(test_df_log)
-        mlflow.log_input(train_df_log, 'training_data')
-        mlflow.log_input(test_df_log, 'validation_data')
+        #mlflow.log_input(train_df_log, 'training_data')
+        #mlflow.log_input(test_df_log, 'validation_data')
+        
+        mlflow.log_artifact(target_path("/data/feature_eng/") + "train_bow1.csv")
         #--------------------------------------
         #model artifact tracking 
         model = model_training(train_df)
